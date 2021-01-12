@@ -1,1 +1,1 @@
-# resolution-probleme-logique
+# resolution-puzzles-logiques
