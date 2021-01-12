@@ -1,0 +1,6 @@
+appdirs==1.4.4
+distlib==0.3.1
+filelock==3.0.12
+minizinc==0.4.2
+six==1.15.0
+virtualenv==20.3.0
