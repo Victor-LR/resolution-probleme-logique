@@ -24,7 +24,7 @@ int: Tuesday = 2;
 int: Wednesday = 3;
 int: Thursday = 4;
 int: Friday = 5;
-array [DAY] of string: nomD = ["Moday","Tuesday","Wednesday","Thursday","Friday"];
+array [DAY] of string: nomD = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
 
 int: t735 = 1;
 int: t740 = 2;
@@ -81,8 +81,8 @@ solve satisfy;
 output
 [nomN[a]
 ++ "\t" ++ show(NAME[a])
-++ "\t" ++ nomF[fix(film[a])] ++" = "++ show(film[a]) 
-++ "\t" ++ nomD[fix(day[a])] ++" = "++ show(day[a])
-++ "\t" ++ nomT[fix(time[a])] ++" = "++ show(time[a])
+++ "\t" ++ nomF[fix(film[a])] 
+++ "\t" ++ nomD[fix(day[a])] 
+++ "\t" ++ nomT[fix(time[a])] 
 ++ "\n" 
 | a in NAME];
