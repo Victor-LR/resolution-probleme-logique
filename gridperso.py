@@ -91,7 +91,7 @@ class Gridperso:
         
             # arguments du haut
             for p in range(l, l+arguments):
-                labelHaut = Label(master, text=self.arguments[self.keys[varIndex]][p-l-1], wraplength=1)
+                labelHaut = Label(master, text=self.arguments[self.keys[varIndex]][p-l], wraplength=1)
                 labelHaut.grid(row=1, column=p)
         
             # grid des boutons
