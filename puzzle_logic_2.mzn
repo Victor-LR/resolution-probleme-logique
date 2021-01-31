@@ -5,8 +5,6 @@ set of int: FILM = 1..5;
 set of int: DAY = 1..5;
 set of int: TIME = 1..5;
 
-var int: x;
-
 int: Jessica = 1;
 int: Laurie = 2;
 int: Mark = 3;
@@ -39,20 +37,9 @@ array [NAME] of var FILM : film;
 array [NAME] of var DAY : day;
 array [NAME] of var TIME : time;
 
-%array [TIME] of var FILM : tfilm;
-%array [TIME] of var DAY : tday;
-
-%array [DAY] of var FILM : dfilm;
-
-
 constraint all_different(film);
 constraint all_different(day);
 constraint all_different(time);
-
-%constraint all_different(tfilm);
-%constraint all_different(tday);
-
-%constraint all_different(dfilm);
 
 
 % indice 1
@@ -69,7 +56,10 @@ constraint exists(n in NAME)(film[n] == Donnie /\ time[n] == t830);
 % indice 3
 % The releases shown before 8:00 pm were on consecutive days, as were the releases shown after 8:00 pm.
 constraint exists(n,m in NAME)(time[n] == t735 /\ time[m] == t740 /\ abs(day[n]-day[m])==1);
-constraint exists(n,m,a in NAME)(time[n] == t820 /\ time[m] == t830 /\ time[a] == t845 /\ (abs(day[n]-day[m])==1 \/ abs(day[m]-day[a])==1 \/ abs(day[n]-day[a])==1) );
+constraint exists(n,m,a in NAME)(time[n] == t820 /\ time[m] == t830 /\ time[a] == t845 
+/\ ( (abs(day[n]-day[m])==1 /\ abs(day[n]-day[a])==1) 
+  \/ (abs(day[m]-day[n])==1 /\ abs(day[m]-day[a])==1) 
+  \/ (abs(day[a]-day[n])==1 /\ abs(day[a]-day[m])==1)) );
 
 % indice 4
 % One of the men and one of the women had a showing before 8:00pm, but neither was mid-week
@@ -86,21 +76,13 @@ constraint exists(n in NAME)(n != Mark /\ film[n]==Scarface /\ time[n]==t740);
 % Neither Miss Farmer nor Miss Peters had a showing on an even-numbered day
 constraint day[Jessica] mod 2 != 0 /\ day[Mary] mod 2 != 0;
 
-
-
-%constraint exists(i in NAME)((film[i] == dfilm[day[i]]) /\ (film[i] == tfilm[time[i]]));
-%constraint exists(i in NAME)(day[i] == tday[time[i]]);
-
-
-%constraint exists(i in TIME)(film[i] == dfilm[day[i]]);
-
 solve satisfy;
 
 output
 [nomN[a]
 ++ "\t" ++ show(NAME[a])
-++ "\t" ++ nomF[fix(film[a])] 
-++ "\t" ++ nomD[fix(day[a])]
-++ "\t" ++ nomT[fix(time[a])]
+++ "\t" ++ nomF[fix(film[a])] ++" = "++ show(film[a]) 
+++ "\t" ++ nomD[fix(day[a])] ++" = "++ show(day[a])
+++ "\t" ++ nomT[fix(time[a])] ++" = "++ show(time[a])
 ++ "\n" 
 | a in NAME];
