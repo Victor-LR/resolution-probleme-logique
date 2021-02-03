@@ -10,7 +10,7 @@ filename = tkinter.filedialog.askopenfilename(initialdir=cwd, filetypes=(('Miniz
 # Create a MiniZinc model
 model = minizinc.Model()
 
-
+print(filename)
 with open(filename, 'r') as file:
     data = file.read()
 model.add_string(data)
@@ -22,7 +22,7 @@ inst = minizinc.Instance(gecode, model)
 # Solve the instance
 result = inst.solve()
 
-if filename == "puzzle_logic_2.mzn":
+if "puzzle_logic_2.mzn" in filename:
     arguments = {"Taille":["13'", "15'", "15'6", "21'5", "27'"],"Processeur":["2.0MHz", "2.3MHz", "2.5MHz", "2.7MHz", "3.1MHz"],"Disque":["250Gb", "320Gb", "500Gb", "750Gb", "1024Gb"],"Prix":["699$", "999$", "1149$", "1349$", "1649$"]}
     current = {"Processeur":[0,0,0,0,0],"Disque":[0,0,0,0,0],"Prix":[0,0,0,0,0]}
 else:
