@@ -39,8 +39,6 @@ array[MONITOR] of var MONITOR: monitor;
 array[MONITOR] of var PROCESSOR: cpu;
 array[MONITOR] of var HARDDISK: hdd;
 array[MONITOR] of var PRICE: price;
-%array[MONITOR] of var price_value: p_value;
-%array[MONITOR] of var cpu_value: c_value;
 
 constraint all_different(monitor);
 constraint all_different(cpu);
@@ -54,8 +52,6 @@ constraint exists(andrew in MONITOR)(
     
     exists(b, c in MONITOR)((price[andrew] == price[b]-300) /\ (cpu[b] == cpu[c]+4) /\ (monitor[c] == monit21_5) )
 
-   % /\ exists(a, b, c in MONITOR) (monitor[c]==monit21_5 /\ (c_value[b] - c_value[c] == 0.4) /\ (p_value[b] - p_value[a] == 300))
-
     %2) The five computers aren: the one chosen by Andrew (which doesn't have the 27' screen), the one which has the 2.0-MHz processor, the computer that has a 250 GB HD, the one which has a price of 1,149 Euros and the computer (which doesn't have the 15' screen) that has the HD bigger than the one chosen by Andrew but smaller than that the one which has the 2.7 MHz processor
     
      /\ exists(b,c,d,e,f in MONITOR)((monitor[andrew] != monit27) /\ (cpu[b] == 20) /\ ( hdd[c] == hdd_250) /\ (price[d] == 1149)
@@ -65,21 +61,7 @@ constraint exists(andrew in MONITOR)(
      /\ (c!=d) /\ (c!=e)
      /\ (d!=e)
      /\ (e!=f))
-     
      );
-     
-    
-    
-   % /\ exists(a,b,c,d,e,f in MONITOR) 
-    %(monitor[a] != monit27 
-    %/\ cpu[b] == cpu2 
-    %/\ hdd[c] == hdd_250 
-    %/\ price[d] == price_1149 
-    %/\ monitor[e] != monit15 
-    %/\ cpu[f] == cpu2_7
-    %/\ hdd[e] > hdd[a] 
-    %/\ hdd[e]<hdd[f]
-    %/\ a+b+c+d+e == 15) 
     
     %3) The computer with the 320 Gb HD has either the 2.0 or the 2.3 MHz processor.The processor of the computer which has the 15' screen is more powerful than the one in the computer that costs 999 euros but less powerful than the processor that is included in the 1,349 Euros computer
     
@@ -87,6 +69,7 @@ constraint exists(a in MONITOR) (hdd[a] == hdd_320 /\ (cpu[a] == 20 \/ cpu[a] ==
 constraint exists(a, b, c in MONITOR) ((monitor[a] == monit15 /\ price[b] == 999 /\ price[c]==1349) /\ (cpu[a] > cpu[b]) /\ (cpu[a] < cpu[c]));
 
     %4) The computer that has the 27' screen doesn't have the 320 Gb hard drive. The 500 GB HD is included in the computer that has a more powerful professor and a larger size screen than the one which costs 699 euros (which doesn't include the 320 Gb HD)
+
 constraint exists(a in MONITOR) (monitor[a] == monit27 /\ hdd[a] != hdd_320);
 constraint exists(a, b in MONITOR) (hdd[a] == hdd_500 /\ price[b] == 699 /\ cpu[a] > cpu[b] /\ monitor[a] > monitor[b] /\ hdd[b] != hdd_320);
     
