@@ -6,39 +6,68 @@ class Gridperso:
     # bouton custom
     class SpecialButton(Button):
 
-        def __init__(self, gridRow, gridCol, outer, currentVar , master=None, **kwargs):
+        def __init__(self, gridRow, gridCol, outer, currentVar, currentVarIndex, gridSize, master=None, **kwargs):
              Button.__init__(self, master, **kwargs)
              self.outer = outer
-             self.state = 0
+             self.etat = 0
              self.gridRow = gridRow
              self.gridCol = gridCol
+             self.gridSize = gridSize
              self.currentVar = currentVar
+             self.currentVarIndex = currentVarIndex
              self.bind('<Button-1>', self.clicked)
     
+        # gestion du click
         def clicked(self, *args):
-            argu = self.outer.arguments
-            print(argu[self.outer.keys[0]][self.gridRow])
-            print(argu[self.currentVar][self.gridCol])
-            print(self.gridCol)
-            if self.state == 0:
-                self['bg'] = 'red'
-                self.state = 1
+            #debug print("x =" + str(self.outer.arguments["name"][self.gridRow]))
+            # print("y =" + str(self.outer.arguments[self.currentVar][self.gridCol]))
+
+            # on marque une case en rouge
+            if self.etat == 0:
                 self.outer.current[self.currentVar][self.gridRow] = 0
-            elif self.state == 1:
+                self.outer.currentVert[self.currentVar][self.gridCol] = 0
+                self.setRed()
+            # on marque une case en vert si elle n'est pas sur une ligne ou une vert ou il y a deja une case verte
+            elif self.etat == 1 and self.outer.current[self.currentVar][self.gridRow] == 0 and self.outer.currentVert[self.currentVar][self.gridCol] == 0:
                 self['bg'] = 'green'
-                self.state = 2
-                self.outer.current[self.currentVar][self.gridRow] = self.gridCol+2
-            elif self.state == 2:
-                self['bg'] = 'white'
-                self.state = 0
+                self.etat = 2
+                self.outer.current[self.currentVar][self.gridRow] = self.gridCol+1
+                self.outer.currentVert[self.currentVar][self.gridCol] = self.gridCol+1
+
+                # on marque les cases sur la même ligne et la même verticale en rouge
+                for i in range(self.gridSize):
+                    if i != self.gridRow:
+                        self.outer.grid[self.currentVarIndex][i][self.gridCol].setRed()
+                    if i != self.gridCol:
+                        self.outer.grid[self.currentVarIndex][self.gridRow][i].setRed()
+             #  on remet la case à l'état de base
+            elif self.etat == 2:
+                self.setDefaut()
                 self.outer.current[self.currentVar][self.gridRow] = 0
+                self.outer.currentVert[self.currentVar][self.gridCol] = 0
+                # on retire les cases marquées
+                for i in range(self.gridSize):
+                    if i != self.gridRow:
+                        self.outer.grid[self.currentVarIndex][i][self.gridCol].setDefaut()
+                    if i != self.gridCol:
+                        self.outer.grid[self.currentVarIndex][self.gridRow][i].setDefaut()
+
+        def setRed(self):
+            self['bg'] = 'red'
+            self.etat = 1
+
+        def setDefaut(self):
+            self['bg'] = 'white'
+            self.etat = 0
+        
 
             
-    def __init__(self, arguments,solution):
+    def __init__(self, arguments,solution,current):
         self.arguments = arguments
         self.keys = list(arguments.keys())
         self.solution = solution
-        self.current = {"film":[0,0,0,0,0],"day":[0,0,0,0,0],"time":[0,0,0,0,0]}
+        self.current = current
+        self.currentVert = current
 
     def checkSolution(self):
         valide = True
@@ -46,13 +75,13 @@ class Gridperso:
             for idx, item in enumerate(self.solution[self.keys[k]]):
                 if item != self.current[self.keys[k]][idx]:
                     valide=False
-                # print(str(idx) + " " + str(item) + "   " + str(self.current[self.keys[k]][idx]))
+                # debug print(str(idx) + " " + str(item) + "   " + str(self.current[self.keys[k]][idx]))
         if valide :
             tkinter.messagebox.showinfo(title="résultat", message="gagner")
         else :
             tkinter.messagebox.showinfo(title="résultat", message="perdu")
 
-    def makeGrid(self):
+    def makeGrid(self):  
         arguments = len(next(iter(self.arguments.values())))
         variables = len(self.arguments.keys())-1
         
@@ -80,7 +109,9 @@ class Gridperso:
         start = 3
         step = arguments+1
         
-        
+        # on initialize la grid de boutons
+        self.grid = [[[0 for f in range(arguments)] for h in range(arguments) ] for g in range(variables+1)]
+
         # parcours des différents grid
         for l in range(start, start+step*variables, step):
             # premiere barre horizontale en haut
@@ -97,15 +128,17 @@ class Gridperso:
             # grid des boutons
             for i in range(2, 2+arguments):
                 for j in range(l, l+arguments):
-                    button = self.SpecialButton(gridRow=i-2,gridCol=j-l-1,outer=self,currentVar=self.keys[varIndex], width=4, height=2, background="White")
+                    gridRow = i-2
+                    gridCol = j-l
+                    button = self.SpecialButton(master=master,gridRow=gridRow,gridCol=gridCol,outer=self,currentVar=self.keys[varIndex],currentVarIndex = varIndex,gridSize=arguments, width=4, height=2, background="White")
                     button.grid(row=i, column=j)
-
+                    # on rempli la grid de boutons pour la gestion des lignes/verticales 
+                    self.grid[varIndex][gridRow][gridCol] = button
         
             # séparation entre les grids
             frameSpace = Frame(master, width=20, height=arguments *
                                90, background="Black")
             frameSpace.grid(row=0, column=l+arguments, rowspan=2+arguments)
-
 
         buttonCheck = Button(master,text="Check",command=self.checkSolution)
         buttonCheck.grid(row=arguments+4, column=2, rowspan=2+arguments)
