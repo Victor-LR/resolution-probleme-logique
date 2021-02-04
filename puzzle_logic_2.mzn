@@ -10,7 +10,7 @@ int: Laurie = 2;
 int: Mark = 3;
 int: Mary = 4;
 int: Sally = 5;
-array [NAME] of string: nomN = ["Jesssica","Laurie","Mark","Mary","Sally"];
+array [NAME] of string: nomN = ["Jessica","Laurie","Mark","Mary","Sally"];
 
 int: Minutes = 1;
 int: Donnie = 2;
