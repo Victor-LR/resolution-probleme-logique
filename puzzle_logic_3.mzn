@@ -76,11 +76,11 @@ constraint exists(a, b in MONITOR) (hdd[a] == hdd_500 /\ price[b] == 699 /\ cpu[
 solve satisfy;
 
     
-output
-[show(a)
-++ "\t" ++ nomM[fix(monitor[a])] 
-++ "\t" ++ show(cpu[a]/10) ++"Mhz"
-++ "\t" ++ nomH[fix(hdd[a])]
-++ "\t" ++ show(price[a]) ++"$"
-++ "\n"
- | a in MONITOR];
+% output
+% [show(a)
+% ++ "\t" ++ nomM[fix(monitor[a])] 
+% ++ "\t" ++ show(cpu[a]/10) ++"Mhz"
+% ++ "\t" ++ nomH[fix(hdd[a])]
+% ++ "\t" ++ show(price[a]) ++"$"
+% ++ "\n"
+%  | a in MONITOR];

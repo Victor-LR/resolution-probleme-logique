@@ -78,11 +78,11 @@ constraint day[Jessica] mod 2 != 0 /\ day[Mary] mod 2 != 0;
 
 solve satisfy;
 
- output
- [nomN[a]
- ++ "\t" ++ show(NAME[a])
- ++ "\t" ++ nomF[fix(film[a])] 
- ++ "\t" ++ nomD[fix(day[a])] 
- ++ "\t" ++ nomT[fix(time[a])] 
- ++ "\n" 
- | a in NAME];
+%  output
+%  [nomN[a]
+%  ++ "\t" ++ show(NAME[a])
+%  ++ "\t" ++ nomF[fix(film[a])] 
+%  ++ "\t" ++ nomD[fix(day[a])] 
+%  ++ "\t" ++ nomT[fix(time[a])] 
+%  ++ "\n" 
+%  | a in NAME];

@@ -62,12 +62,12 @@ class Gridperso:
         
 
             
-    def __init__(self, arguments,solution,current):
+    def __init__(self, arguments,solution,current,currentVert):
         self.arguments = arguments
         self.keys = list(arguments.keys())
         self.solution = solution
         self.current = current
-        self.currentVert = current
+        self.currentVert = currentVert
 
     def checkSolution(self):
         valide = True
@@ -75,7 +75,7 @@ class Gridperso:
             for idx, item in enumerate(self.solution[self.keys[k]]):
                 if item != self.current[self.keys[k]][idx]:
                     valide=False
-                # debug print(str(idx) + " " + str(item) + "   " + str(self.current[self.keys[k]][idx]))
+                print(str(idx) + " " + str(item) + "   " + str(self.current[self.keys[k]][idx]))
         if valide :
             tkinter.messagebox.showinfo(title="résultat", message="gagner")
         else :
@@ -88,13 +88,12 @@ class Gridperso:
         # grid
         master = Tk()
         
-        length = arguments * variables * 60
-        height = arguments * 120
-        master.geometry(str(length) + "x" + str(height))
+        size = arguments * variables * 80
+        master.geometry(str(size) + "x" + str(size))
         
-        
-        # barre horizontale gauche
-        labelHorizontalGauche = Label(master, text=self.keys[0], wraplength=1,height=arguments * 4, background="black", foreground="white")
+        # ---------- NIVEAU 1 ---------
+        # barre verticale gauche
+        labelHorizontalGauche = Label(master, text=self.keys[0],height=arguments * 3 ,width=5, background="black", foreground="white")
         labelHorizontalGauche.grid(row=2, column=0, rowspan=arguments)
         
         # arguments de gauche
@@ -103,15 +102,15 @@ class Gridperso:
             labelGauche.grid(row=k, column=1)
         
         # barre de séparation verticale de gauche
-        frameSpace = Frame(master, width=20, height=arguments * 90, background="Black")
+        frameSpace = Frame(master, width=15, height=arguments * 70, background="Black")
         frameSpace.grid(row=0, column=2, rowspan=2+arguments)
         
         start = 3
         step = arguments+1
         
         # on initialize la grid de boutons
-        self.grid = [[[0 for f in range(arguments)] for h in range(arguments) ] for g in range(variables+1)]
-
+        self.grid = [[[0 for f in range(arguments)] for h in range(arguments) ] for g in range(variables+4)]
+        
         # parcours des différents grid
         for l in range(start, start+step*variables, step):
             # premiere barre horizontale en haut
@@ -122,7 +121,7 @@ class Gridperso:
         
             # arguments du haut
             for p in range(l, l+arguments):
-                labelHaut = Label(master, text=self.arguments[self.keys[varIndex]][p-l], wraplength=1)
+                labelHaut = Label(master, text=self.arguments[self.keys[varIndex]][p-l])
                 labelHaut.grid(row=1, column=p)
         
             # grid des boutons
@@ -136,11 +135,70 @@ class Gridperso:
                     self.grid[varIndex][gridRow][gridCol] = button
         
             # séparation entre les grids
-            frameSpace = Frame(master, width=20, height=arguments *
-                               90, background="Black")
+            frameSpace = Frame(master, width=15, height=arguments *
+                               70, background="Black")
             frameSpace.grid(row=0, column=l+arguments, rowspan=2+arguments)
 
+        # ---------- NIVEAU 2 ---------
+        # barre horizontale gauche
+        labelHorizontalGauche = Label(master, text=self.keys[3],height=arguments * 3 ,width=5, background="black", foreground="white")
+        labelHorizontalGauche.grid(row=2+arguments, column=0, rowspan=arguments)
+        
+        # arguments de gauche
+        for k in range(2+arguments, 2+arguments*2):
+            labelGauche = Label(master, text=self.arguments[self.keys[3]][k-2-arguments])
+            labelGauche.grid(row=k, column=1)     
+
+        # barre de séparation verticale de gauche
+        frameSpace = Frame(master, width=15, height=arguments * 60, background="Black")
+        frameSpace.grid(row=2+arguments, column=2, rowspan=arguments)
+        
+        variables2 = variables-1
+        # parcours des différents grid du milieu
+        for l in range(start, start+step*variables2, step):
+        
+            # grid des boutons
+            for i in range(2+arguments, 2+arguments*2):
+                for j in range(l, l+arguments):
+                    gridRow = i-(2+arguments)
+                    gridCol = j-l
+                    button = self.SpecialButton(master=master,gridRow=gridRow,gridCol=gridCol,outer=self,currentVar=self.keys[1],currentVarIndex = 4,gridSize=arguments, width=4, height=2, background="White")
+                    button.grid(row=i, column=j)
+                    # on rempli la grid de boutons pour la gestion des lignes/verticales 
+                    self.grid[4][gridRow][gridCol] = button
+
+            # séparation entre les grids
+            frameSpace = Frame(master, width=15, height=arguments *
+                               60, background="Black")
+            frameSpace.grid(row=2+arguments, column=l+arguments, rowspan=arguments)
+        
+            
+        # ---------- NIVEAU 3 ---------
+
+        # barre horizontale gauche
+        labelHorizontalGauche = Label(master, text=self.keys[2],height=arguments * 3 ,width=5, background="black", foreground="white")
+        labelHorizontalGauche.grid(row=2+arguments*2, column=0, rowspan=arguments)
+        
+        # arguments de gauche
+        for k in range(2+arguments*2, 2+arguments*3):
+            labelGauche = Label(master, text=self.arguments[self.keys[2]][k-2-arguments*2])
+            labelGauche.grid(row=k, column=1)     
+
+        # barre de séparation verticale de gauche
+        frameSpace = Frame(master, width=15, height=arguments * 60, background="Black")
+        frameSpace.grid(row=2+arguments*2, column=2, rowspan=arguments)
+
+        # grid des boutons
+        for i in range(2+arguments*2, 2+arguments*3):
+            for j in range(3,3+arguments):
+                gridRow = i-2-arguments*2
+                gridCol = j-3
+                button = self.SpecialButton(master=master,gridRow=gridRow,gridCol=gridCol,outer=self,currentVar=self.keys[1],currentVarIndex = 5,gridSize=arguments, width=4, height=2, background="White")
+                button.grid(row=i, column=j)
+                # on rempli la grid de boutons pour la gestion des lignes/verticales 
+                self.grid[5][gridRow][gridCol] = button
+    
         buttonCheck = Button(master,text="Check",command=self.checkSolution)
-        buttonCheck.grid(row=arguments+4, column=2, rowspan=2+arguments)
+        buttonCheck.grid(row=arguments*3+4, column=2, rowspan=2+arguments)
         master.mainloop()
 
