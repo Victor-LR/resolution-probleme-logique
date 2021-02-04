@@ -62,12 +62,13 @@ class Gridperso:
         
 
             
-    def __init__(self, arguments,solution,current,currentVert):
+    def __init__(self, arguments,solution,current,currentVert,text):
         self.arguments = arguments
         self.keys = list(arguments.keys())
         self.solution = solution
         self.current = current
         self.currentVert = currentVert
+        self.text = text
 
     def checkSolution(self):
         valide = True
@@ -198,6 +199,9 @@ class Gridperso:
                 # on rempli la grid de boutons pour la gestion des lignes/verticales 
                 self.grid[5][gridRow][gridCol] = button
     
+        description = Label(master,text = self.text)
+        description.grid(row = 3+arguments*2, column= arguments*2 ,columnspan = 5+arguments *2,rowspan = arguments *2)
+        
         buttonCheck = Button(master,text="Check",command=self.checkSolution)
         buttonCheck.grid(row=arguments*3+4, column=2, rowspan=2+arguments)
         master.mainloop()
