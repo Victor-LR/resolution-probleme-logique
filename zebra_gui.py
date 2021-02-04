@@ -23,8 +23,9 @@ class Zebra_GUI:
         window.title("Zebra puzzles")
 
         tk.Label(window, text="").grid(column=0, row=0)
-
         tk.Label(window, text="").grid(column=0, row=1)
+
+        #création d'un label pour les frames
         labels_frame = tk.Frame(window, padx = 5)
         tk.Label(labels_frame, text="Shirt").grid(column=0, row=2)
         tk.Label(labels_frame, text="Name").grid(column=0, row=3)
@@ -32,7 +33,8 @@ class Zebra_GUI:
         tk.Label(labels_frame, text="Pasta").grid(column=0, row=5)
         tk.Label(labels_frame, text="Wine").grid(column=0, row=6)
         tk.Label(labels_frame, text="Age").grid(column=0, row=7)
-        labels_frame.grid(row=2, column=0, sticky="nesw")
+
+        labels_frame.grid(row=2, column=0)
 
         self.create_combo_boxes(window)
 
@@ -103,6 +105,7 @@ class Zebra_GUI:
             self.combo_boxes['cases' + str(i) + str(6)].set(self.wine_values[self.solution.wine[i - 1] - 1])
             self.combo_boxes['cases' + str(i) + str(7)].set(self.age_values[self.solution.age[i - 1] - 1])
 
+    # fonction qui permet de changer la couleur du widget
     def color_change(self, event):
         color = event.widget.get()
         column = event.widget.grid_info()['column']
